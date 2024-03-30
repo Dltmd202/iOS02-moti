@@ -37,6 +37,15 @@ export class GroupAchievementEntity extends BaseTimeEntity {
   @Column({ type: 'text' })
   content: string;
 
+  @Column({ type: 'int' })
+  likeEmojiCount: number;
+
+  @Column({ type: 'int' })
+  fireEmojiCount: number;
+
+  @Column({ type: 'int' })
+  smileEmojiCount: number;
+
   @OneToOne(() => ImageEntity, (image) => image.groupAchievement, {
     eager: true,
   })
@@ -50,6 +59,9 @@ export class GroupAchievementEntity extends BaseTimeEntity {
       this.groupCategory?.toModel(),
       this.content,
       this.image?.toModel(),
+      this.likeEmojiCount,
+      this.fireEmojiCount,
+      this.smileEmojiCount,
     );
     groupAchievement.id = this.id;
     groupAchievement.createdAt = this.createdAt;

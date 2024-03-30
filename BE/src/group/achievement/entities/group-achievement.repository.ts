@@ -32,6 +32,21 @@ export class GroupAchievementRepository extends TransactionalRepository<GroupAch
     return groupAchievementEntity?.toModel();
   }
 
+  async findByIdForUpdate(id: number) {
+    const groupAchievementEntity = await this.repository
+      .createQueryBuilder('group_achievement')
+      .setLock('pessimistic_write')
+      .select()
+      .leftJoin('group_achievement.group', 'group')
+      .leftJoin('group_achievement.user', 'user')
+      .addSelect('group.id')
+      .addSelect('user.id')
+      .addSelect('user.userCode')
+      .where('group_achievement.id = :id', { id })
+      .getOne();
+    return groupAchievementEntity?.toModel();
+  }
+
   async findAchievementDetailByIdAndBelongingGroup(
     achievementId: number,
     groupId: number,

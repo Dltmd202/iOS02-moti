@@ -50,6 +50,22 @@ export class GroupAchievementEmojiRepository extends TransactionalRepository<Gro
     return findOne?.toModel();
   }
 
+  async getGroupAchievementEmojisByGroupAchievementIdAndUserAndEmoji(
+    groupAchievementId: number,
+    user: User,
+  ): Promise<Array<GroupAchievementEmoji>> {
+    const find = await this.repository
+      .createQueryBuilder('gae')
+      .select('gae')
+      .where('gae.group_achievement_id = :groupAchievementId', {
+        groupAchievementId,
+      })
+      .andWhere('gae.user_id = :userId', { userId: user.id })
+      .getMany();
+
+    return find.map((it) => it.toModel());
+  }
+
   async findGroupAchievementEmojiMetaData(
     user: User,
     groupAchievementId: number,

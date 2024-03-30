@@ -28,8 +28,6 @@ import { GroupAchievementCreateRequest } from '../dto/group-achievement-create-r
 import { PaginateGroupAchievementRequest } from '../dto/paginate-group-achievement-request';
 import { PaginateGroupAchievementResponse } from '../dto/paginate-group-achievement-response';
 import { AchievementDetailResponse } from '../../../achievement/dto/achievement-detail-response';
-import { AchievementUpdateResponse } from '../../../achievement/dto/achievement-update-response';
-import { AchievementUpdateRequest } from '../../../achievement/dto/achievement-update-request';
 import { GroupAchievementUpdateRequest } from '../dto/group-achievement-update-request';
 import { GroupAchievementUpdateResponse } from '../dto/group-achievement-update-response';
 import { GroupAchievementDeleteResponse } from '../dto/group-achievement-delete-response';
