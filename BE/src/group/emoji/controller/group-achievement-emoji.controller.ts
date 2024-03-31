@@ -16,12 +16,14 @@ import { GroupAchievementEmojiResponse } from '../dto/group-achievement-emoji-re
 import { ParseEmojiPipe } from '../../../common/pipe/parse-emoji.pipe';
 import { GroupAchievementEmojiListElement } from '../dto/group-achievement-emoji-list-element';
 import { CompositeGroupAchievementEmoji } from '../dto/composite-group-achievement-emoji';
+import { RedisLockService } from '../../../config/redis/redis.service';
 
 @ApiTags('그룹 도전기록 이모지 API')
 @Controller('/api/v1/groups/:groupId/achievements/:achievementId/emojis')
 export class GroupAchievementEmojiController {
   constructor(
     private readonly groupAchievementEmojiService: GroupAchievementEmojiService,
+    private readonly redisLockService: RedisLockService,
   ) {}
 
   @ApiBearerAuth('accessToken')
@@ -41,6 +43,7 @@ export class GroupAchievementEmojiController {
     @Param('achievementId', ParseIntPipe) achievementId: number,
     @Param('emoji', ParseEmojiPipe) emoji: Emoji,
   ): Promise<ApiData<GroupAchievementEmojiResponse>> {
+    const lock = await this.redisLockService.acquireLock('resource-name', 3000);
     const groupAchievementEmojiResponse =
       await this.groupAchievementEmojiService.toggleAchievementEmoji(
         user,

@@ -10,6 +10,8 @@ import { UserGroupRepository } from '../../group/entities/user-group.repository'
 import { NoSuchGroupUserException } from '../../achievement/exception/no-such-group-user.exception';
 import { GroupAchievementEmojiResponse } from '../dto/group-achievement-emoji-response';
 import { CompositeGroupAchievementEmoji } from '../dto/composite-group-achievement-emoji';
+import { DistributedLock } from '../../../config/distributed-lock/distributed-lock.decorator';
+import { DistributedLockKey } from '../../../config/distributed-lock/distributed-lock-key.decorator';
 
 @Injectable()
 export class GroupAchievementEmojiService {
@@ -19,11 +21,12 @@ export class GroupAchievementEmojiService {
     private readonly groupAchievementRepository: GroupAchievementRepository,
   ) {}
 
+  @DistributedLock('LOCK', 5000)
   @Transactional()
   async toggleAchievementEmoji(
     user: User,
     groupId: number,
-    achievementId: number,
+    @DistributedLockKey('achievementId') achievementId: number,
     emoji: Emoji,
   ) {
     await this.validateUserGroup(user, groupId);
